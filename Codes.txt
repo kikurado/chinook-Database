@@ -1,0 +1,46 @@
+/* 1st code --- Top 5 artists/bands that produced Albums */
+
+SELECT A.name Band_Artist_Name,
+       COUNT(AB.TITLE) No_Of_Albums
+FROM Artist A
+JOIN Album AB ON A.ArtistId =AB.ArtistId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 5
+
+/* 2nd code --- How famous Each Genre in Terms of $ spent on it */
+SELECT G.Name,
+       ROUND(SUM(IL.UnitPrice*IL.Quantity), 2) AS Total_paid
+FROM Genre G
+JOIN Track T ON G.GenreId = T.GenreId
+JOIN InvoiceLine IL ON T.TrackId = IL.TrackId
+GROUP BY 1
+ORDER BY 2 DESC
+
+
+/* 3rd code ----COUNTRIES THAT ROCK MUSIC IS MOST FAMOUS IN */
+
+
+
+SELECT i.BillingCountry,
+       g.name,
+       COUNT(g.name)
+FROM Invoice i
+JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId
+JOIN Track t ON il.TrackId = t.TrackId
+JOIN Genre g ON t.GenreId = g.GenreId
+WHERE g.Name = 'Rock'
+GROUP BY 1,
+         2
+ORDER BY 3 DESC
+
+/* 4th code----Which Employee Made the Most Sales ? */
+
+SELECT E.FirstName,
+       E.LastName,
+       ROUND(SUM(I.Total), 2) Amt_was_Made
+FROM Employee E
+JOIN Customer C ON E.EmployeeId = C.SupportRepId
+JOIN Invoice I ON C.CustomerId = I.CustomerId
+GROUP BY 1,
+         2
